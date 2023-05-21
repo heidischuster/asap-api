@@ -28,6 +28,7 @@ jobs:
       - run:
           name: Build application Docker image
           command: |
+            cd backend
             docker build --cache-from=app -t asap-api .
       - run:
           name: Save Docker image layer cache
