@@ -41,7 +41,6 @@ def validate_member_id_json(
         last_name = " ",
         dob = "01/01/1971",
         country = "")
-    try:
-        return member.decode_id(member_id)
-    except Exception as e:
-        return str(e)
+    if member.validate_id(member_id):
+        return "The id is valid!"
+    return "The id does not match the format!"

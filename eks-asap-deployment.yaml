@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-asap-api-linux-deployment
+  namespace: eks-asap-api-app
+  labels:
+    app: eks-asap-api-linux-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: eks-asap-api-linux-app
+  template:
+    metadata:
+      labels:
+        app: eks-asap-api-linux-app
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+      containers:
+      - name: nginx
+        image: public.ecr.aws/nginx/nginx:1.21   --- 251878010083.dkr.ecr.us-east-1.amazonaws.com/asap-api:0.1
+        ports:
+        - name: http
+          containerPort: 80
+        imagePullPolicy: IfNotPresent
+      nodeSelector:
+        kubernetes.io/os: linux

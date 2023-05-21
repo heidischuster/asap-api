@@ -1,8 +1,10 @@
 from typing import Optional
 from datetime import datetime
+from random import random
+import re
+import uuid
 
 from pydantic import BaseModel, Field, ValidationError, validator
-
 from cryptography.fernet import Fernet
 
 
@@ -10,13 +12,14 @@ from cryptography.fernet import Fernet
 fernet = Fernet(b'nNjpIl9Ax2LRtm-p6ryCRZ8lRsL0DtuY0f9JeAe2wG0=')
 separator = "|"
 validate = "asap"
+regularExpression = re.compile('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}')
 
 # Shared properties
 class Member(BaseModel):
     first_name: str
     last_name: str
     dob: str
-    country: str = Field(default=None, max_length=2, description="2 digit country code")
+    country: str = Field(max_length=2, description="2 digit country code")
     member_id: Optional[str] = None
 
     @validator('dob')
@@ -26,6 +29,15 @@ class Member(BaseModel):
         return v.title()
 
     def generate_id(self):
+        message = self.first_name.lower() + separator + self.last_name.lower() + separator + self.dob + separator \
+                  + self.country.upper() + separator + str(random())
+        self.member_id = str(uuid.uuid5(uuid.NAMESPACE_URL, message))
+        return self
+
+    def validate_id(self, member_id):
+        return regularExpression.match(member_id)
+
+    def generate_id_decryptable(self):
         message = self.first_name.lower() + separator + self.last_name.lower() + separator + self.dob + separator \
                   + self.country.upper() + separator + validate
         self.member_id = fernet.encrypt(message.encode())
