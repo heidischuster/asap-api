@@ -1,8 +1,8 @@
 from fastapi.testclient import TestClient
-
 from app.core.config import settings
 
 
+# FastApi TestClient simulates Http requests
 def test_create_member_id(
     client: TestClient
 ) -> None:
@@ -18,6 +18,8 @@ def test_create_member_id(
     assert data["country"] == created_member["country"]
     assert len(created_member["member_id"]) > 4
 
+# negative tests to see the validation working. There are more of them in the schema test, so we don't have to
+# go overboard here
 def test_create_member_id_invalid(
     client: TestClient
 ) -> None:
@@ -26,6 +28,7 @@ def test_create_member_id_invalid(
         f"{settings.API_V1_STR}/member_id/", json=data,
     )
     assert 422 == r.status_code
+
 
 def test_validate_member_id(
     client: TestClient

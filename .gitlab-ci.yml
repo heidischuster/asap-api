@@ -7,6 +7,12 @@ stages:
   - build
   - deploy
 build:
+    ##### this step currently breaks because supposingly the new docker version is not  backwards compatible ###
+    # the error message is weird and the discussions saying that downgrading docker helps but there are no old
+    # template versions...
+    # $ docker build -t $CI_PROJECT_PATH:latest .
+    # Step 1 : FROM python:3.9 as base
+    # Error parsing reference: "python:3.9 as base" is not a valid repository/tag
   stage: build
   script:
     - cd backend

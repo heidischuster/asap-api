@@ -1,5 +1,7 @@
 #! /usr/bin/env sh
 
+# This is running the tests in a docker container
+
 # Exit in case of error
 set -e
 

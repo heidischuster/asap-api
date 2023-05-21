@@ -1,9 +1,9 @@
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
+from pydantic import AnyHttpUrl, BaseSettings, validator
 
-
+# General settings for the app
 class Settings(BaseSettings):
     API_V1_STR: str = ""
     PROJECT_NAME: str = "asap-api"

@@ -1,20 +1,21 @@
 import pytest
 from app import schemas
-
 from pydantic import  ValidationError
 
+# The id should never come back as the same. There is a minuscule possibility of a clash.
 def test_create_member_id() -> None:
     member = schemas.Member(
-        first_name = "Heidi",
-        last_name = "Schuster",
-        dob = "01/21/1999",
-        country = "de")
+        first_name="Heidi",
+        last_name="Schuster",
+        dob="01/21/1999",
+        country="de")
     member.generate_id()
     assert member.validate_id(member.member_id)
-    first_id=member.member_id
+    first_id = member.member_id
     member.generate_id()
     assert str(member.member_id) != str(first_id)
 
+# lots of negative tests to make sure the validation is working
 def test_create_member_id_validation() -> None:
     with pytest.raises(ValueError):
         member = schemas.Member(
@@ -38,6 +39,7 @@ def test_create_member_id_validation() -> None:
             dob = "01/21/1999",
             country = "Deutschland")
 
+# More negative tests. Never can have too many.
 def test_create_member_id_validation_date() -> None:
     with pytest.raises(ValueError):
         member = schemas.Member(
@@ -58,6 +60,7 @@ def test_create_member_id_validation_date() -> None:
             dob = "1/21/99",
             country = "de")
 
+# checking the member id validate method
 def test_validate_id() -> None:
     member = schemas.Member(
         first_name = "Heidi",
@@ -67,6 +70,7 @@ def test_validate_id() -> None:
     assert member.validate_id("aeaa98d9-1647-5ceb-9b4e-ac31ae25c04f")
     assert member.validate_id("AAAA98d9-1647-5ceb-9b4e-ac31ae25c04f")
 
+# and more negative tests
 def test_validate_invalid_id() -> None:
     member = schemas.Member(
         first_name = "Heidi",
@@ -87,6 +91,7 @@ def test_validate_invalid_id() -> None:
     if member.validate_id("AAA98d9-1!47-5ceb-9b4e-   31ae25c04f"):
         isValid = True
     assert isValid is False
+
 
 def test_decod_id() -> None:
     member = schemas.Member(

@@ -1,5 +1,6 @@
 #! /usr/bin/env sh
 
+# Just building the docker file
 # Exit in case of error
 set -e
 
