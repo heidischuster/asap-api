@@ -19,7 +19,7 @@ build_kaniko_command:
         # Prepare Kaniko configuration file
         - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
         # Build and push the image from the Dockerfile at the root of the project.
-        - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $IMAGE_DESTINATION
+        - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/backend/Dockerfile --destination $IMAGE_DESTINATION
         # Print the full registry path of the pushed image
         - echo "Image pushed successfully to ${IMAGE_DESTINATION}"
 
@@ -32,30 +32,6 @@ build_kaniko_command:
 # * If your base image does not have a PATH value, your Dockerfile will require to specify one. Ref. https://github.com/GoogleContainerTools/kaniko/issues/650
 # * Kaniko depends on the Docker image repositories supporting schema2 (https://docs.docker.com/registry/spec/manifest-v2-2/), both for pulling and pushing, so it will not work otherwise. As of July 2019, this is the case with quay.io. Ref https://github.com/moby/buildkit/issues/409
 
-
-# Using Kaniko to make multi-stage builds
-# --------------------------------------
-
-# This is useful when in the process of creating an image, part of the files created are not needed in the final image.
-# For example, a go file with several module dependencies that will be later compiled into a single binary. With this method only
-# the compiled binary is copied to the image that is pushed to the registry. If done without multi staged builds, to obtain the same result, several GitLab stages would have been necessary, and the binary must have been passed using artifacts. This is a much simpler solution.
-build_kaniko_command multistage build:
-    stage: build
-    variables:
-      # To push to a specific docker tag other than latest(the default), amend the --destination parameter, e.g. --destination $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
-      # See https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#variables-reference for available variables
-      IMAGE_DESTINATION: ${CI_REGISTRY_IMAGE}:latest
-    image:
-        # We recommend using the CERN version of the Kaniko image: gitlab-registry.cern.ch/ci-tools/docker-image-builder
-        name: gitlab-registry.cern.ch/ci-tools/docker-image-builder
-        entrypoint: [""]
-    script:
-        # Prepare Kaniko configuration file
-        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-        # Build and push the image from the Dockerfile at the root of the project.
-        - /kaniko/executor --context $CI_PROJECT_DIR/multistage_builds --dockerfile $CI_PROJECT_DIR/multistage_builds/Dockerfile --destination $IMAGE_DESTINATION
-        # Print the full registry path of the pushed image
-        - echo "Image pushed successfully to ${IMAGE_DESTINATION}"
 
 # Using privileged runners
 # ------------------------
