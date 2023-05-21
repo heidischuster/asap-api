@@ -9,6 +9,7 @@ stages:
 build:
   stage: build
   script:
+    - cd backend
     - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH:latest .
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH:latest
   tags:
