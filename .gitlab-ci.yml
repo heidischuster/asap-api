@@ -11,7 +11,7 @@ build:
   script:
     - cd backend
     - echo $CI_REGISTRY/$CI_PROJECT_PATH:latest
-    - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH:latest .
+    - docker build -t $CI_PROJECT_PATH:latest .
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH:latest
   tags:
     - docker
