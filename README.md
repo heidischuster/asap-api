@@ -32,6 +32,19 @@ decode the id back into attribute values. To make 100% sure this system created 
 But the generated ID are very long and ugly keys, so I changed it to a MD5 hash that has a defined format, e.g. xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 There is a random number added to the values when hashing, which makes it almost 100% sure there will never be a duplicate id generated.
 
+## Cloud deployment
+
+The docker container is currently running in the Google cloud. It only has one instance to keep cost low. Google has a new UI with new
+functionality to deploy docker containers.
+
+The docs:
+
+https://asap-qjb3pwf5ba-uc.a.run.app/doc
+
+https://asap-qjb3pwf5ba-uc.a.run.app/redoc
+
+And the same validation form:
+https://asap-qjb3pwf5ba-uc.a.run.appvalidate
 
 ## Backend local development, additional details
 
