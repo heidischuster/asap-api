@@ -44,7 +44,9 @@ https://asap-qjb3pwf5ba-uc.a.run.app/doc
 https://asap-qjb3pwf5ba-uc.a.run.app/redoc
 
 And the same validation form:
-https://asap-qjb3pwf5ba-uc.a.run.appvalidate
+
+https://asap-qjb3pwf5ba-uc.a.run.app/member_id/validate
+
 
 ## Backend local development, additional details
 
